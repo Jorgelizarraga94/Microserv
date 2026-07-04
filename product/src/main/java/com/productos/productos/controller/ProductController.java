@@ -1,15 +1,17 @@
 package com.productos.productos.controller;
 
-import org.springframework.web.bind.annotation.PatchMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import com.productos.productos.model.Product;
+import com.productos.productos.service.IProductService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/product")
 public class ProductController {
-    @PostMapping("create/")
-    public void create(){
-
+    @Autowired
+    private IProductService productService;
+    @PostMapping("/create")
+    public void create(@RequestBody Product product){
+        productService.createProduct(product);
     }
 }
