@@ -6,6 +6,12 @@
       <list>
         <option value="$PROJECT_DIR$/pom.xml" />
         <option value="$PROJECT_DIR$/security login microserv/pom.xml" />
+        <option value="$PROJECT_DIR$/cart/pom.xml" />
+        <option value="$PROJECT_DIR$/config-server/pom.xml" />
+        <option value="$PROJECT_DIR$/eureka/pom.xml" />
+        <option value="$PROJECT_DIR$/product/pom.xml" />
+        <option value="$PROJECT_DIR$/sales/pom.xml" />
+        <option value="$PROJECT_DIR$/security-login-microserv/pom.xml" />
       </list>
     </option>
   </component>
