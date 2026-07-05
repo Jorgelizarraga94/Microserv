@@ -2,16 +2,22 @@ package com.carrito.carrito.service;
 
 import com.carrito.carrito.model.Cart;
 import com.carrito.carrito.model.Product;
+import com.carrito.carrito.dto.ProductDTO;
 import com.carrito.carrito.repository.ICartRepository;
+import com.carrito.carrito.repository.IProductAPI;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
-import java.util.List;
+
 @Service
 public class CartService implements ICartService{
     @Autowired
     ICartRepository cartRepository;
+
+    @Autowired
+    private IProductAPI productAPI;
+
     @Override
     public Cart createNewCart() {
         Cart cart = new Cart();
@@ -22,7 +28,7 @@ public class CartService implements ICartService{
 
     @Override
     public Cart addProduct(Long cartId, Long productId, Integer cant) {
-        Cart cart = cartRepository.findById(cartId).orElse(null);
+        Cart cart = getCart(cartId);
 
         Product product = new Product();
         product.setProductId(productId);
@@ -30,6 +36,10 @@ public class CartService implements ICartService{
 
         assert cart != null;
         cart.getItems().add(product);
+
+        ProductDTO productDTO = productAPI.getPrice(productId);
+        Double total = productDTO.getPrecio() * cant;
+        cart.setTotalPrice(cart.getTotalPrice() + total);
         return cartRepository.save(cart);
     }
 

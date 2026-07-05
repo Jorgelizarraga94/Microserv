@@ -14,4 +14,9 @@ public class ProductService implements IProductService{
     public void createProduct(Product product) {
         productRepo.save(product);
     }
+
+    @Override
+    public Product getProductById(Long id_product) {
+        return productRepo.findById(id_product).orElse(null);
+    }
 }
