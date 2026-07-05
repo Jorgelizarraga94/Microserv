@@ -5,5 +5,6 @@ import com.carrito.carrito.model.Cart;
 public interface ICartService {
     Cart createNewCart();
     Cart addProduct(Long cartId, Long productId, Integer cant);
+    String deleteProduct(Long cartId, Long productId);
     Cart getCart(Long id);
 }

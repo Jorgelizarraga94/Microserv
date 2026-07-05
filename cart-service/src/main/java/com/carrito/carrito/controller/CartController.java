@@ -27,6 +27,11 @@ public class CartController {
             @RequestParam Integer cant) {
         return carritoService.addProduct(cartId, productId, cant);
     }
+    @DeleteMapping("/delete/{cart_id}/{product_id}")
+    public String deleteProduct(@PathVariable Long cart_id,@PathVariable Long product_id){
+        carritoService.deleteProduct(cart_id,product_id);
+        return "eliminado con exito";
+    }
 
     // Endpoint para ver el estado del carrito
     @GetMapping("/{id}")
