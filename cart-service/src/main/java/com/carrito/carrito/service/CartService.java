@@ -73,4 +73,9 @@ public class CartService implements ICartService{
     public Cart getCart(Long id) {
         return cartRepository.findById(id).orElse(null);
     }
+
+    @Override
+    public void deleteCart(Long cartId) {
+        cartRepository.deleteById(cartId);
+    }
 }

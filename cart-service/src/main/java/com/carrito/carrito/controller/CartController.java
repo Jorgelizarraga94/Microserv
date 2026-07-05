@@ -18,6 +18,12 @@ public class CartController {
         return carritoService.createNewCart();
     }
 
+    @DeleteMapping("/delete/{cart_id}")
+    public String deleteCart(@PathVariable ("cart_id") Long cart_id){
+        carritoService.deleteCart(cart_id);
+        return "delete cart correctly";
+    }
+
     // Endpoint para agregar un producto al carrito
     // URL ejemplo: http://localhost:8083/cart/add?cartId=1&productId=2&cant=3
     @PostMapping("/add")

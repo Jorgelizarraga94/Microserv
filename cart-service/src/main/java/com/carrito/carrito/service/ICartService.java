@@ -7,4 +7,6 @@ public interface ICartService {
     Cart addProduct(Long cartId, Long productId, Integer cant);
     String deleteProduct(Long cartId, Long productId);
     Cart getCart(Long id);
+
+    void deleteCart(Long cartId);
 }
