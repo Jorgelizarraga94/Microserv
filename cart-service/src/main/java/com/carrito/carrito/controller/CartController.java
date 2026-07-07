@@ -39,7 +39,6 @@ public class CartController {
         return "eliminado con exito";
     }
 
-    // Endpoint para ver el estado del carrito
     @GetMapping("/{id}")
     public Cart getCart(@PathVariable Long id) {
         return carritoService.getCart(id);

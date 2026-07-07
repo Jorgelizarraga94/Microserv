@@ -10,13 +10,14 @@
         <module name="config-server" />
         <module name="SecurityLoginMicroserv" />
       </profile>
-      <profile name="Annotation profile for productos" enabled="true">
+      <profile name="Annotation profile for ventas" enabled="true">
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <processorPath useClasspath="false">
           <entry name="$MAVEN_REPOSITORY$/org/projectlombok/lombok/1.18.46/lombok-1.18.46.jar" />
         </processorPath>
+        <module name="ventas" />
         <module name="carrito" />
         <module name="productos" />
         <module name="eureka-sv" />
@@ -24,7 +25,6 @@
     </annotationProcessing>
     <bytecodeTargetLevel>
       <module name="microserv" target="1.8" />
-      <module name="ventas" target="17" />
     </bytecodeTargetLevel>
   </component>
   <component name="JavacSettings">

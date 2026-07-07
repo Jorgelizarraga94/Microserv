@@ -1,3 +1,24 @@
 spring:
   application:
-    name: ventas
+    name: sale-service
+  datasource:
+    url: jdbc:mysql://localhost:3306/db_sale?serverTimezone=UTC
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
+  jpa:
+    database-platform: org.hibernate.dialect.MySQLDialect
+    hibernate:
+      ddl-auto: update
+
+cloud:
+  openfeign:
+    circuitbreaker:
+      enabled: true
+
+server:
+  port: 8084
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka
