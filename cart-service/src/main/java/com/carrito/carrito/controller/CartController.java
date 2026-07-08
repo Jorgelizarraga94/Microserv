@@ -3,6 +3,7 @@ package com.carrito.carrito.controller;
 import com.carrito.carrito.model.Cart;
 import com.carrito.carrito.service.ICartService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -11,6 +12,9 @@ public class CartController {
 
     @Autowired
     private ICartService carritoService;
+
+    @Value("${server.port}")
+    public int serverPort;
 
     // Endpoint para crear un carrito vacío
     @PostMapping("/create")
