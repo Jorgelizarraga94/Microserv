@@ -1,11 +1,13 @@
 package com.ventas.ventas.model;
 
+import com.ventas.ventas.dto.ProductDTO;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.ArrayList;
 import java.util.List;
 @Entity
 @Setter
@@ -20,4 +22,6 @@ public class Cart {
     @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name = "cart_id")
     private List<Product> items;
+    @Transient
+    private List<ProductDTO> productDTO = new ArrayList<>();
 }

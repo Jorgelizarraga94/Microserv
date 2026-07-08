@@ -1,6 +1,6 @@
 package com.ventas.ventas.service;
 
-import com.netflix.discovery.converters.Auto;
+import com.ventas.ventas.dto.ProductDTO;
 import com.ventas.ventas.dto.SaleDTO;
 import com.ventas.ventas.model.Cart;
 import com.ventas.ventas.model.Product;
@@ -46,12 +46,10 @@ public class SaleService implements ISaleService{
         // Como 'cart-service' ya maneja la lógica de los productos,
         // nos devolverá el objeto Cart con su lista de productos.
         Cart cart = cartAPI.getCart(sale.getCart_id());
-        /*for (Product product : cart.getItems()){
-            Product newProduct = getProductDetails(product.getId());
-            product.setName(newProduct.getName());
-            product.setMarca(newProduct.getMarca());
-            product.setPrecio(newProduct.getPrecio());
-        }*/
+        for (Product product : cart.getItems()){
+            ProductDTO newProduct = getProductDetails(product.getProductId());
+            cart.getProductDTO().add(newProduct);
+        }
         // 3. Combinamos todo en nuestro DTO de respuesta
         SaleDTO response = new SaleDTO();
         response.setSaleId(sale.getId());
@@ -62,7 +60,7 @@ public class SaleService implements ISaleService{
     }
 
     @Override
-    public Product getProductDetails(Long productId) {
+    public ProductDTO getProductDetails(Long productId) {
         return productAPI.getProductById(productId);
     }
 

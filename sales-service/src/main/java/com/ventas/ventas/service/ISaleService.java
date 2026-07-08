@@ -1,5 +1,6 @@
 package com.ventas.ventas.service;
 
+import com.ventas.ventas.dto.ProductDTO;
 import com.ventas.ventas.dto.SaleDTO;
 import com.ventas.ventas.model.Product;
 import com.ventas.ventas.model.Sale;
@@ -10,6 +11,6 @@ public interface ISaleService{
     Sale createSale(Long id_cart);
     Sale getSale(Long idSale);
     SaleDTO getSaleDetails(Long saleId);
-    Product getProductDetails(Long productId);
+    ProductDTO getProductDetails(Long productId);
 
 }
