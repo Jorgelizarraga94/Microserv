@@ -5,6 +5,7 @@ import com.carrito.carrito.model.Product;
 import com.carrito.carrito.dto.ProductDTO;
 import com.carrito.carrito.repository.ICartRepository;
 import com.carrito.carrito.repository.IProductAPI;
+import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -15,9 +16,8 @@ import java.util.ArrayList;
 public class CartService implements ICartService{
     @Autowired
     ICartRepository cartRepository;
-
     @Autowired
-    private IProductAPI productAPI;
+    private ProductClient productClient;
 
     @Override
     public Cart createNewCart() {
@@ -44,7 +44,7 @@ public class CartService implements ICartService{
 
         cart.getItems().add(nuevoProducto);
 
-        ProductDTO productDTO = productAPI.getPrice(productId);
+        ProductDTO productDTO = productClient.getProduct(productId);
         Double total = productDTO.getPrecio() * cant;
         cart.setTotalPrice(cart.getTotalPrice() + total);
 
@@ -60,7 +60,7 @@ public class CartService implements ICartService{
                 .findFirst()
                 .orElseThrow(()-> new RuntimeException("producto no encontrado"));
 
-        ProductDTO productDto = productAPI.getPrice(product.getProductId());
+        ProductDTO productDto = productClient.getProduct(product.getProductId());
         Double discount = productDto.getPrecio() * product.getCant();
         cart.setTotalPrice(cart.getTotalPrice() - discount);
 
@@ -77,5 +77,9 @@ public class CartService implements ICartService{
     @Override
     public void deleteCart(Long cartId) {
         cartRepository.deleteById(cartId);
+    }
+
+    public String fallbackGetProduct(){
+        return "error de comunicación con product-service";
     }
 }

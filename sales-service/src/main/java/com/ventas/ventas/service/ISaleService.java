@@ -11,6 +11,4 @@ public interface ISaleService{
     Sale createSale(Long id_cart);
     Sale getSale(Long idSale);
     SaleDTO getSaleDetails(Long saleId);
-    ProductDTO getProductDetails(Long productId);
-
 }

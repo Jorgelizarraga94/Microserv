@@ -8,6 +8,7 @@ import com.ventas.ventas.model.Sale;
 import com.ventas.ventas.repository.ICartAPI;
 import com.ventas.ventas.repository.IProductAPI;
 import com.ventas.ventas.repository.ISaleRepository;
+import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -21,7 +22,8 @@ public class SaleService implements ISaleService{
     private IProductAPI productAPI;
     @Autowired
     private ISaleRepository saleRepository;
-
+    @Autowired
+    private ProductClient productClient;
     @Override
     public Sale createSale(Long id_cart) {
         Cart cart = cartAPI.getCart(id_cart);
@@ -47,7 +49,7 @@ public class SaleService implements ISaleService{
         // nos devolverá el objeto Cart con su lista de productos.
         Cart cart = cartAPI.getCart(sale.getCart_id());
         for (Product product : cart.getItems()){
-            ProductDTO newProduct = getProductDetails(product.getProductId());
+            ProductDTO newProduct = productClient.getProductDetails(product.getProductId());
             cart.getProductDTO().add(newProduct);
         }
         // 3. Combinamos todo en nuestro DTO de respuesta
@@ -58,10 +60,4 @@ public class SaleService implements ISaleService{
 
         return response;
     }
-
-    @Override
-    public ProductDTO getProductDetails(Long productId) {
-        return productAPI.getProductById(productId);
-    }
-
 }
