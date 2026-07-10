@@ -7,8 +7,10 @@ import com.carrito.carrito.repository.ICartRepository;
 import com.carrito.carrito.repository.IProductAPI;
 import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.ArrayList;
 
@@ -45,6 +47,11 @@ public class CartService implements ICartService{
         cart.getItems().add(nuevoProducto);
 
         ProductDTO productDTO = productClient.getProduct(productId);
+
+        if (productDTO.getPrecio() == null || productDTO.getPrecio() <= 0) {
+            throw new ResponseStatusException(HttpStatus.SERVICE_UNAVAILABLE);
+        }
+
         Double total = productDTO.getPrecio() * cant;
         cart.setTotalPrice(cart.getTotalPrice() + total);
 
@@ -77,9 +84,5 @@ public class CartService implements ICartService{
     @Override
     public void deleteCart(Long cartId) {
         cartRepository.deleteById(cartId);
-    }
-
-    public String fallbackGetProduct(){
-        return "error de comunicación con product-service";
     }
 }
