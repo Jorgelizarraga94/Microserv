@@ -5,6 +5,8 @@ import com.productos.productos.repository.IProductRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class ProductService implements IProductService{
     @Autowired
@@ -18,5 +20,15 @@ public class ProductService implements IProductService{
     @Override
     public Product getProductById(Long id_product) {
         return productRepo.findById(id_product).orElse(null);
+    }
+
+    @Override
+    public List<Product> getProductsList() {
+        return productRepo.findAll();
+    }
+
+    @Override
+    public void deleteProductById(Long idProduct) {
+        productRepo.deleteById(idProduct);
     }
 }

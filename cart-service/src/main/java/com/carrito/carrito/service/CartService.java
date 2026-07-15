@@ -13,6 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.ArrayList;
+import java.util.List;
 
 @Service
 public class CartService implements ICartService{
@@ -84,5 +85,10 @@ public class CartService implements ICartService{
     @Override
     public void deleteCart(Long cartId) {
         cartRepository.deleteById(cartId);
+    }
+
+    @Override
+    public List<Cart> getcarts() {
+        return cartRepository.findAll();
     }
 }

@@ -18,4 +18,5 @@ public class Product {
     private String name;
     private String marca;
     private Double precio;
+    private String photo;
 }

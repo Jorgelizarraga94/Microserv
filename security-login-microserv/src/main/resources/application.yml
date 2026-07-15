@@ -1,5 +1,5 @@
 server:
-  port: 8080 # puerto Gateway
+  port: 8090 # puerto Gateway
 
 spring:
   application:
