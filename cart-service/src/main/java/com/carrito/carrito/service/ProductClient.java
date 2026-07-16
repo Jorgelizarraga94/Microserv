@@ -19,9 +19,9 @@ public class ProductClient {
     public ProductDTO fallbackGetProduct(Long productId, Throwable t){
         System.out.println("error de llamada a microservicio product, error "  +  t.getMessage());
         ProductDTO productDTO = new ProductDTO();
-        productDTO.setPrecio(0.0);
+        productDTO.setPrice(0.0);
         productDTO.setName("producto no disponible");
-        productDTO.setMarca("marca no disponible");
+        productDTO.setBrand("marca no disponible");
         return productDTO;
     }
 }

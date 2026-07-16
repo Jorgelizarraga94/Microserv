@@ -1,5 +1,7 @@
 package com.carrito.carrito.service;
 
+import com.carrito.carrito.dto.CartItemResponseDTO;
+import com.carrito.carrito.dto.CartResponseDTO;
 import com.carrito.carrito.model.Cart;
 import com.carrito.carrito.model.Product;
 import com.carrito.carrito.dto.ProductDTO;
@@ -34,6 +36,7 @@ public class CartService implements ICartService{
     public Cart addProduct(Long cartId, Long productId, Integer cant) {
         Cart cart = getCart(cartId);
 
+        // 1. Verificación
         boolean existe = cart.getItems().stream()
                 .anyMatch(p -> p.getProductId().equals(productId));
 
@@ -41,21 +44,25 @@ public class CartService implements ICartService{
             throw new RuntimeException("El producto ya está en el carrito");
         }
 
+        // 2. Crear y asignar
         Product nuevoProducto = new Product();
         nuevoProducto.setProductId(productId);
-        nuevoProducto.setCant(cant); // Asegurate de setear la cantidad
+        nuevoProducto.setCant(cant);
 
-        cart.getItems().add(nuevoProducto);
+        // 3. Importante: inicializa el totalPrice si es null antes de sumar
+        if (cart.getTotalPrice() == null) cart.setTotalPrice(0.0);
 
+        // 4. Obtener datos del microservicio
         ProductDTO productDTO = productClient.getProduct(productId);
 
-        if (productDTO.getPrecio() == null || productDTO.getPrecio() <= 0) {
-            throw new ResponseStatusException(HttpStatus.SERVICE_UNAVAILABLE);
-        }
+        // 5. Calcular y sumar
+        Double subtotal = productDTO.getPrice() * cant;
+        cart.setTotalPrice(cart.getTotalPrice() + subtotal);
 
-        Double total = productDTO.getPrecio() * cant;
-        cart.setTotalPrice(cart.getTotalPrice() + total);
+        // 6. Agregar a la lista (Hibernate detectará el nuevo objeto al guardar el padre)
+        cart.getItems().add(nuevoProducto);
 
+        // 7. Guardar el carrito. Como tienes CascadeType.ALL, guardará el nuevo Product automáticamente
         return cartRepository.save(cart);
     }
 
@@ -69,7 +76,7 @@ public class CartService implements ICartService{
                 .orElseThrow(()-> new RuntimeException("producto no encontrado"));
 
         ProductDTO productDto = productClient.getProduct(product.getProductId());
-        Double discount = productDto.getPrecio() * product.getCant();
+        Double discount = productDto.getPrice() * product.getCant();
         cart.setTotalPrice(cart.getTotalPrice() - discount);
 
         cart.getItems().removeIf(p -> p.getProductId().equals(productId));
@@ -82,9 +89,35 @@ public class CartService implements ICartService{
         return cartRepository.findById(id).orElse(null);
     }
 
+
+
     @Override
     public void deleteCart(Long cartId) {
         cartRepository.deleteById(cartId);
+    }
+
+    @Override
+    public CartResponseDTO getDetailedCart(Long id) {
+            // 1. Buscas la entidad en la base de datos
+            Cart cartEntity = cartRepository.findById(id).orElseThrow();
+
+            // 2. Transformas la lista de entidades (IDs) en una lista enriquecida (DTOs)
+            List<CartItemResponseDTO> detailedItems = cartEntity.getItems().stream().map(product -> {
+                // Aquí llamas al otro microservicio (product-service)
+                ProductDTO details = productClient.getProduct(product.getProductId());
+
+                return new CartItemResponseDTO(
+                        product.getProductId(),
+                        details.getName(),
+                        details.getBrand(),
+                        details.getPrice(),
+                        product.getCant(),
+                        details.getPrice() * product.getCant() // El subtotal calculado
+                );
+            }).toList();
+
+            // 3. Devuelves el DTO final que el front va a recibir
+            return new CartResponseDTO(cartEntity.getId(), cartEntity.getTotalPrice(), detailedItems);
     }
 
     @Override

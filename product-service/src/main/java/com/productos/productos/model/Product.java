@@ -1,8 +1,5 @@
 package com.productos.productos.model;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -16,7 +13,9 @@ public class Product {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String name;
-    private String marca;
-    private Double precio;
+    @Column(name="marca")
+    private String brand;
+    @Column(name="precio")
+    private Double price;
     private String photo;
 }

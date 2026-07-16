@@ -5,8 +5,8 @@ import lombok.Setter;
 
 @Setter @Getter
 public class ProductDTO {
-    private Long id;
+    private Long ProductId;
     private String name;
-    private String marca;
-    private Double precio;
+    private String brand;
+    private Double price;
 }

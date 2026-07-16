@@ -1,5 +1,6 @@
 package com.carrito.carrito.model;
 
+import com.carrito.carrito.dto.ProductDTO;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
