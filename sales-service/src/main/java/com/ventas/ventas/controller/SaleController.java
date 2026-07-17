@@ -7,21 +7,28 @@ import com.ventas.ventas.service.ISaleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/sale")
 public class SaleController {
     @Autowired
     private ISaleService saleService;
 
-    @PostMapping("/createSale/{id_cart}")
-    public String createSale(@PathVariable ("id_cart") Long id_cart){
-        saleService.createSale(id_cart);
+    @PostMapping("/createSale/{user_id}/{id_cart}")
+    public String createSale(@PathVariable ("id_cart") Long id_cart, @PathVariable ("user_id") String user_id){
+        saleService.createSale(user_id,id_cart);
         return "the sale has been correctly create, " + "cart number " + id_cart;
     }
 
     @GetMapping("/getSale/{id_sale}")
     public Sale getSaleById(@PathVariable ("id_sale") Long id_sale){
         return saleService.getSale(id_sale);
+    }
+
+    @GetMapping("/getSalesByUser/{userId}")
+    public List<SaleDTO> getSalesByUser(@PathVariable String userId) {
+        return saleService.getSalesByUserId(userId); // Debes implementar este método en tu Service
     }
 
     @GetMapping("/getSaleDetail/{id_sale}")

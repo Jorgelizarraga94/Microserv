@@ -13,6 +13,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class SaleService implements ISaleService{
@@ -25,7 +27,7 @@ public class SaleService implements ISaleService{
     @Autowired
     private ProductClient productClient;
     @Override
-    public Sale createSale(Long id_cart) {
+    public Sale createSale(String user_id, Long id_cart) {
         Cart cart = cartAPI.getCart(id_cart);
 
         // Validación crítica
@@ -34,6 +36,7 @@ public class SaleService implements ISaleService{
         }
 
         Sale sale = new Sale();
+        sale.setUserId(user_id);
         sale.setDate(LocalDate.now());
         sale.setCart_id(cart.getId());
         return saleRepository.save(sale);
@@ -65,5 +68,20 @@ public class SaleService implements ISaleService{
         response.setCart(cart);
 
         return response;
+    }
+
+    @Override
+    public List<SaleDTO> getSalesByUserId(String userId) {
+        List<Sale> sales = saleRepository.findByUserId(userId);
+
+        // 2. Convertimos las entidades a DTOs (puedes usar un mapper o hacerlo manual)
+        return sales.stream().map(sale -> {
+            Cart cart = cartAPI.getCart(sale.getCart_id());
+            SaleDTO dto = new SaleDTO();
+            dto.setSaleId(sale.getId());
+            dto.setDate(sale.getDate());
+            dto.setCart(cart); // Asegúrate de que este objeto esté cargado
+            return dto;
+        }).collect(Collectors.toList());
     }
 }

@@ -15,6 +15,7 @@ public class Sale {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    private String userId;
     private LocalDate date;
     private Long cart_id;
 }

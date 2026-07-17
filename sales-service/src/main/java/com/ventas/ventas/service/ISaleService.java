@@ -6,9 +6,13 @@ import com.ventas.ventas.model.Product;
 import com.ventas.ventas.model.Sale;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public interface ISaleService{
-    Sale createSale(Long id_cart);
+    Sale createSale(String user_id, Long id_cart);
     Sale getSale(Long idSale);
     SaleDTO getSaleDetails(Long saleId);
+
+    List<SaleDTO> getSalesByUserId(String userId);
 }
