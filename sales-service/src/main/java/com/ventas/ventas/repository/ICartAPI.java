@@ -8,6 +8,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 @FeignClient("cart-service")
 public interface ICartAPI {
-    @GetMapping("/cart/{id}")
+    @GetMapping("cart/getInfoCartById/{id}")
     public Cart getCart(@PathVariable ("id") Long id);
 }

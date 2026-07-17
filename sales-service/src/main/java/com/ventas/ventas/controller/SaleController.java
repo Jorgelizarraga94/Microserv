@@ -13,11 +13,12 @@ public class SaleController {
     @Autowired
     private ISaleService saleService;
 
-    @PostMapping("/{id_cart}")
+    @PostMapping("/createSale/{id_cart}")
     public String createSale(@PathVariable ("id_cart") Long id_cart){
         saleService.createSale(id_cart);
         return "the sale has been correctly create, " + "cart number " + id_cart;
     }
+
     @GetMapping("/getSale/{id_sale}")
     public Sale getSaleById(@PathVariable ("id_sale") Long id_sale){
         return saleService.getSale(id_sale);

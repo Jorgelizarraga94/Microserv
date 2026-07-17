@@ -27,6 +27,12 @@ public class SaleService implements ISaleService{
     @Override
     public Sale createSale(Long id_cart) {
         Cart cart = cartAPI.getCart(id_cart);
+
+        // Validación crítica
+        if (cart == null) {
+            throw new RuntimeException("No se encontró un carrito con el ID: " + id_cart);
+        }
+
         Sale sale = new Sale();
         sale.setDate(LocalDate.now());
         sale.setCart_id(cart.getId());
