@@ -1,5 +1,6 @@
 package com.ventas.ventas.service;
 
+import com.ventas.ventas.dto.CartResponseDTO;
 import com.ventas.ventas.dto.ProductDTO;
 import com.ventas.ventas.dto.SaleDTO;
 import com.ventas.ventas.model.Cart;
@@ -13,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -28,7 +30,7 @@ public class SaleService implements ISaleService{
     private ProductClient productClient;
     @Override
     public Sale createSale(String user_id, Long id_cart) {
-        Cart cart = cartAPI.getCart(id_cart);
+        CartResponseDTO cart = cartAPI.getCart(id_cart);
 
         // Validación crítica
         if (cart == null) {
@@ -38,7 +40,7 @@ public class SaleService implements ISaleService{
         Sale sale = new Sale();
         sale.setUserId(user_id);
         sale.setDate(LocalDate.now());
-        sale.setCart_id(cart.getId());
+        sale.setCart_id(cart.getCartId());
         return saleRepository.save(sale);
     }
 
@@ -47,41 +49,19 @@ public class SaleService implements ISaleService{
         return saleRepository.findById(idSale).orElse(null);
     }
 
-    @Override
-    public SaleDTO getSaleDetails(Long saleId) {
-        // 1. Buscamos la venta en la base de datos de 'sales-service'
-        Sale sale = saleRepository.findById(saleId)
-                .orElseThrow(() -> new RuntimeException("Venta no encontrada"));
-
-        // 2. Traemos la información completa del carrito desde 'cart-service' usando Feign
-        // Como 'cart-service' ya maneja la lógica de los productos,
-        // nos devolverá el objeto Cart con su lista de productos.
-        Cart cart = cartAPI.getCart(sale.getCart_id());
-        for (Product product : cart.getItems()){
-            ProductDTO newProduct = productClient.getProductDetails(product.getProductId());
-            cart.getProductDTO().add(newProduct);
-        }
-        // 3. Combinamos todo en nuestro DTO de respuesta
-        SaleDTO response = new SaleDTO();
-        response.setSaleId(sale.getId());
-        response.setDate(sale.getDate());
-        response.setCart(cart);
-
-        return response;
-    }
 
     @Override
-    public List<SaleDTO> getSalesByUserId(String userId) {
+    public List<CartResponseDTO> getSalesByUserId(String userId) {
         List<Sale> sales = saleRepository.findByUserId(userId);
+        List<CartResponseDTO> listCart = new ArrayList<>();
 
-        // 2. Convertimos las entidades a DTOs (puedes usar un mapper o hacerlo manual)
-        return sales.stream().map(sale -> {
-            Cart cart = cartAPI.getCart(sale.getCart_id());
-            SaleDTO dto = new SaleDTO();
-            dto.setSaleId(sale.getId());
-            dto.setDate(sale.getDate());
-            dto.setCart(cart); // Asegúrate de que este objeto esté cargado
-            return dto;
-        }).collect(Collectors.toList());
+        for (Sale sale : sales){
+            CartResponseDTO cart = cartAPI.getCart(sale.getCart_id());
+            cart.setSaleId(sale.getId());
+            cart.setDate(sale.getDate());
+            listCart.add(cart);
+        }
+
+        return listCart;
     }
 }

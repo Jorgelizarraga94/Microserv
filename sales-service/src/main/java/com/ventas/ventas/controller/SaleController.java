@@ -1,5 +1,6 @@
 package com.ventas.ventas.controller;
 
+import com.ventas.ventas.dto.CartResponseDTO;
 import com.ventas.ventas.dto.SaleDTO;
 import com.ventas.ventas.model.Sale;
 import com.ventas.ventas.repository.ISaleRepository;
@@ -27,12 +28,7 @@ public class SaleController {
     }
 
     @GetMapping("/getSalesByUser/{userId}")
-    public List<SaleDTO> getSalesByUser(@PathVariable String userId) {
+    public List<CartResponseDTO> getSalesByUser(@PathVariable String userId) {
         return saleService.getSalesByUserId(userId); // Debes implementar este método en tu Service
-    }
-
-    @GetMapping("/getSaleDetail/{id_sale}")
-    public SaleDTO getSaleDetail(@PathVariable ("id_sale") Long id_sale){
-        return saleService.getSaleDetails(id_sale);
     }
 }

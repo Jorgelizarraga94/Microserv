@@ -1,5 +1,6 @@
 package com.ventas.ventas.service;
 
+import com.ventas.ventas.dto.CartResponseDTO;
 import com.ventas.ventas.dto.ProductDTO;
 import com.ventas.ventas.dto.SaleDTO;
 import com.ventas.ventas.model.Product;
@@ -12,7 +13,6 @@ import java.util.List;
 public interface ISaleService{
     Sale createSale(String user_id, Long id_cart);
     Sale getSale(Long idSale);
-    SaleDTO getSaleDetails(Long saleId);
 
-    List<SaleDTO> getSalesByUserId(String userId);
+    List<CartResponseDTO> getSalesByUserId(String userId);
 }
