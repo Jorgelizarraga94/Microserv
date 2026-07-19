@@ -8,8 +8,6 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <module name="api-gateway" />
-        <module name="config-server" />
-        <module name="SecurityLoginMicroserv" />
       </profile>
       <profile name="Annotation profile for ventas" enabled="true">
         <sourceOutputDir name="target/generated-sources/annotations" />
@@ -25,7 +23,9 @@
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
+      <module name="config-server" target="17" />
       <module name="microserv" target="1.8" />
+      <module name="SecurityLoginMicroserv" target="17" />
     </bytecodeTargetLevel>
   </component>
   <component name="JavacSettings">

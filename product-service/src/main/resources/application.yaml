@@ -24,6 +24,13 @@ eureka:
       defaultZone: http://localhost:8761/eureka
 
 
-
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          # Esta debe ser la URL de tu tenant, terminada en /
+          issuer-uri: https://logintienda.us.auth0.com/
+          # El audience debe ser el Identifier que creaste en el paso anterior
+          audience: https://microserv.com.ar
 
 

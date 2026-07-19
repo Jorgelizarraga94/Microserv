@@ -1,0 +1,41 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: api-gateway
+  cloud:
+    gateway:
+      server:
+        webflux:
+
+
+          routes:
+            - id: product-service
+              uri: lb://product-service # o el nombre en Eureka si usas Service Discovery
+              predicates:
+                - Path=/product-service/**
+            - id: cart-service
+              uri: lb://cart-service # o el nombre en Eureka si usas Service Discovery
+              filters:
+                - TokenRelay
+              predicates:
+                - Path=/cart-service/**
+            - id: sale-service
+              uri: lb://sale-service # o el nombre en Eureka si usas Service Discovery
+              predicates:
+                - Path=/sale-service/**
+
+          discovery:
+            locator:
+              enabled: true
+              lower-case-service-id: true
+
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          # Reemplaza con tu dominio de Auth0 (¡No olvides la barra al final!)
+          issuer-uri: https://logintienda.us.auth0.com/
+          audience: https://microserv.com.ar
+
