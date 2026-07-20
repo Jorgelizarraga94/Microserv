@@ -1,0 +1,136 @@
+version: '3.8'
+
+services:
+  # ==========================================
+  # 1. MOTOR DE BASE DE DATOS (MySQL)
+  # ==========================================
+  mysql-db:
+    image: mysql:8.0
+    container_name: mysql-db
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD}  # Contraseña maestra de MySQL
+    volumes:
+      - mysql-data:/var/lib/mysql              # Persistencia para que no se borren tus datos
+    networks:
+      - tienda-network
+    healthcheck: # Avisa a los servicios cuando la DB está lista para recibir conexiones
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+
+  # ==========================================
+  # 2. EL SERVIDOR DE EUREKA
+  # ==========================================
+  eureka-server:
+    build:
+      context: ./eureka-server
+      dockerfile: Dockerfile
+    ports:
+      - "8761:8761"
+    networks:
+      - tienda-network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8761/actuator/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+
+  # ==========================================
+  # 3. SERVICIO DE PRODUCTOS
+  # ==========================================
+  product-service:
+    build:
+      context: ./product-service
+      dockerfile: Dockerfile
+    ports:
+      - "8082:8082"
+    environment:
+      - EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE=${EUREKA_URL}
+      # Conexión a su propia base de datos: productos_db
+      - SPRING_DATASOURCE_URL=${DATA_BASE_URL}
+      - SPRING_DATASOURCE_USERNAME=${DB_USER}
+      - SPRING_DATASOURCE_PASSWORD=${DB_ROOT_PASSWORD}
+    depends_on:
+      mysql-db:
+        condition: service_healthy
+      eureka-server:
+        condition: service_healthy
+    networks:
+      - tienda-network
+
+  # ==========================================
+  # 4. SERVICIO DE CARRITO
+  # ==========================================
+  cart-service:
+    build:
+      context: ./cart-service
+      dockerfile: Dockerfile
+    ports:
+      - "8083:8083"
+    environment:
+      - EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE=${EUREKA_URL}
+      # Conexión a su propia base de datos: carrito_db
+      - SPRING_DATASOURCE_URL=${DATA_BASE_URL}
+      - SPRING_DATASOURCE_USERNAME=${DB_USER}
+      - SPRING_DATASOURCE_PASSWORD=${DB_ROOT_PASSWORD}
+    depends_on:
+      mysql-db:
+        condition: service_healthy
+      eureka-server:
+        condition: service_healthy
+    networks:
+      - tienda-network
+
+  # ==========================================
+  # 5. SERVICIO DE VENTAS
+  # ==========================================
+  sales-service:
+    build:
+      context: ./sales-service
+      dockerfile: Dockerfile
+    ports:
+      - "8084:8084"
+    environment:
+      - EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE=${EUREKA_URL}
+      # Conexión a su propia base de datos: ventas_db
+      - SPRING_DATASOURCE_URL=${DATA_BASE_URL}
+      - SPRING_DATASOURCE_USERNAME=${DB_USER}
+      - SPRING_DATASOURCE_PASSWORD=${DB_ROOT_PASSWORD}
+    depends_on:
+      mysql-db:
+        condition: service_healthy
+      eureka-server:
+        condition: service_healthy
+    networks:
+      - tienda-network
+
+  # ==========================================
+  # 6. API GATEWAY
+  # ==========================================
+  api-gateway:
+    build:
+      context: ./api-gateway
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+    environment:
+      - EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE=${EUREKA_URL}
+    depends_on:
+      eureka-server:
+        condition: service_healthy
+    networks:
+      - tienda-network
+
+# ==========================================
+# VOLÚMENES Y REDES Y PERSISTENCIA
+# ==========================================
+volumes:
+  mysql-data:
+    driver: local
+
+networks:
+  tienda-network:
+    driver: bridge
