@@ -119,8 +119,7 @@ services:
     environment:
       - EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE=${EUREKA_URL}
     depends_on:
-      eureka-server:
-        condition: service_healthy
+      - eureka-server
     networks:
       - tienda-network
 
