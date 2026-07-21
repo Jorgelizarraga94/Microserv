@@ -39,3 +39,7 @@ spring:
           issuer-uri: https://logintienda.us.auth0.com/
           audience: https://microserv.com.ar
 
+eureka:
+  client:
+    service-url:
+      defaultZone: http://eureka-server:8761/eureka/

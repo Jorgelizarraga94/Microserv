@@ -10,7 +10,7 @@ services:
     ports:
       - "3306:3306"
     environment:
-      MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD}  # Contraseña maestra de MySQL
+      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}  # Contraseña maestra de MySQL
     volumes:
       - mysql-data:/var/lib/mysql              # Persistencia para que no se borren tus datos
     networks:
@@ -26,7 +26,7 @@ services:
   # ==========================================
   eureka-server:
     build:
-      context: ./eureka-server
+      context: ./eureka
       dockerfile: Dockerfile
     ports:
       - "8761:8761"
@@ -50,9 +50,9 @@ services:
     environment:
       - EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE=${EUREKA_URL}
       # Conexión a su propia base de datos: productos_db
-      - SPRING_DATASOURCE_URL=${DATA_BASE_URL}
+      - SPRING_DATASOURCE_URL=${DATA_BASE_URL_PRODUCT}
       - SPRING_DATASOURCE_USERNAME=${DB_USER}
-      - SPRING_DATASOURCE_PASSWORD=${DB_ROOT_PASSWORD}
+      - SPRING_DATASOURCE_PASSWORD=${DB_PASSWORD}
     depends_on:
       mysql-db:
         condition: service_healthy
@@ -73,9 +73,9 @@ services:
     environment:
       - EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE=${EUREKA_URL}
       # Conexión a su propia base de datos: carrito_db
-      - SPRING_DATASOURCE_URL=${DATA_BASE_URL}
+      - SPRING_DATASOURCE_URL=${DATA_BASE_URL_CART}
       - SPRING_DATASOURCE_USERNAME=${DB_USER}
-      - SPRING_DATASOURCE_PASSWORD=${DB_ROOT_PASSWORD}
+      - SPRING_DATASOURCE_PASSWORD=${DB_PASSWORD}
     depends_on:
       mysql-db:
         condition: service_healthy
@@ -96,9 +96,9 @@ services:
     environment:
       - EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE=${EUREKA_URL}
       # Conexión a su propia base de datos: ventas_db
-      - SPRING_DATASOURCE_URL=${DATA_BASE_URL}
+      - SPRING_DATASOURCE_URL=${DATA_BASE_URL_SALE}
       - SPRING_DATASOURCE_USERNAME=${DB_USER}
-      - SPRING_DATASOURCE_PASSWORD=${DB_ROOT_PASSWORD}
+      - SPRING_DATASOURCE_PASSWORD=${DB_PASSWORD}
     depends_on:
       mysql-db:
         condition: service_healthy
