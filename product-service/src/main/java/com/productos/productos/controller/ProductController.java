@@ -9,6 +9,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/product")
+@CrossOrigin(origins = "https://micro-serv-front-end-react.vercel.app", allowCredentials = "true")
 public class ProductController {
 
     @Autowired
