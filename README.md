@@ -13,9 +13,16 @@ Sistema basado en una arquitectura de microservicios desarrollado en **Java** y 
 
 * **Java** (Versión 17+)
 * **Spring Boot**
+* **Spring Cloud & Patrones de Microservicios:**
+  * **Service Registry & Service Discovery:** Implementado mediante **Netflix Eureka** para el descubrimiento automático de instancias.
+  * **API Gateway Pattern:** Utilizado como punto de entrada único, proxy reverso, enrutamiento y control global de políticas de seguridad y CORS.
+  * **Load Balancing:** Distribución del tráfico entre microservicios.
+  * **Circuit Breaker:** Implementado con **Resilience4j** para garantizar la resiliencia y tolerancia a fallos del sistema.
+* **DTOs (Data Transfer Objects):** Utilizados para el desacoplamiento de las capas y la transferencia limpia de datos entre el cliente y el servidor.
 * **Spring Cloud** (Netflix Eureka Server & Spring Cloud Gateway)
 * **Spring Security & OAuth2 Resource Server** (Autenticación mediante JWT con Auth0)
 * **MySQL** (Base de datos relacional)
+* **Cloudinary:** Utilizado para el almacenamiento y optimización de imágenes de productos (las URLs resultantes se almacenan y gestionan desde el backend).
 * **Docker & Docker Compose** (Contenedorización y orquestación local)
 
 ---
@@ -31,6 +38,10 @@ El sistema se compone de los siguientes módulos:
 5. **`sales-service`**: Microservicio para el procesamiento y registro de ventas/pedidos.
 
 ---
+## 🗺️ Próximas Mejoras / Planificado
+
+* **Spring Cloud Config Server:** Integración planificada con un repositorio de GitHub para la gestión centralizada de configuraciones.
+* **Integrar a la creación de productos la variable de categoria para luego por filtrar por el mismo.
 
 ## ⚙️ Configuración y Ejecución Local con Docker
 
