@@ -1,11 +1,11 @@
 # 🛒 Arquitectura de Microservicios - Backend
 
-Sistema backend basado en una arquitectura de microservicios desarrollado en **Java** y **Spring Boot**, diseñado para gestionar productos, carritos de compras y ventas de forma escalable y desacoplada.
+Sistema basado en una arquitectura de microservicios desarrollado en **Java** y **Spring Boot**, diseñado para gestionar productos, carritos de compras y ventas de forma escalable y desacoplada.
 
 ## 🌐 Acceso y Decisiones de Despliegue
 
 * **Frontend en Producción:** Para ver el proyecto funcionando, se puede ingresar a https://micro-serv-front-end-react.vercel.app.
-* **Nota sobre la infraestructura:** Originalmente se planificó levantar el proyecto utilizando una máquina virtual en **Oracle Cloud Infrastructure (OCI)**. Sin embargo, los recursos de la capa gratuita ofrecían muy poca memoria RAM, lo que impedía que los microservicios arrancaran correctamente debido a problemas de falta de memoria (*Out of Memory*). Por este motivo, se optó por una arquitectura híbrida para la demostración: los microservicios se ejecutan localmente mediante **Docker** y se conectan con la web utilizando un túnel seguro con **Ngrok**.
+* **Nota sobre la infraestructura:** Originalmente se planificó levantar el proyecto utilizando una máquina virtual en **Oracle Cloud Infrastructure (OCI)** para luego configurar el servidor y llevarlo a producción por ese medio. Sin embargo, los recursos de la capa gratuita ofrecían muy poca memoria RAM, lo que impedía que los microservicios arrancaran correctamente debido a problemas de falta de memoria (*Out of Memory*). Por este motivo, se optó por una arquitectura híbrida para la demostración: los microservicios se ejecutan localmente mediante **Docker** y se conectan con la web utilizando un túnel seguro con **Ngrok**.
 
 ---
 
