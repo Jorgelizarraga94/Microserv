@@ -43,6 +43,7 @@ Asegurate de tener instalado **Docker** y **Docker Compose** en tu equipo.
 2. Configura las variables de entorno necesarias (crea un archivo .env basado en las credenciales correspondientes para la base de datos y Auth0).
 3. Levanta toda la infraestructura utilizando Docker Compose:
   docker compose up --build -d
+
 3.Verificación:
   Eureka Dashboard: http://localhost:8761
   API Gateway: http://localhost:8080   
